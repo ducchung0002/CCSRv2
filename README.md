@@ -3,7 +3,7 @@
 </p>
 
 <div align="center">
-## Improving the Stability and Efficiency of Diffusion Models for Content Consistent Super-Resolution
+<h2>Improving the Stability and Efficiency of Diffusion Models for Content Consistent Super-Resolution</h2>
 
 
 <a href='https://arxiv.org/pdf/2401.00877'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a> 

@@ -20,16 +20,20 @@
 </div>
 
 ## ⏰ Update
-- **2024.12.10**: Code and models for CCSR-v2 are released. 👀 Please refer to this [branch](https://github.com/csslc/CCSR/tree/CCSR-v2.0).
+- **2024.12.11**: Code and models for CCSR-v2 are released. 👀 Please refer to this [branch](https://github.com/csslc/CCSR/tree/CCSR-v2.0).
 - **2024.9.25**: ⭐[CCSR-v2](https://arxiv.org/pdf/2401.00877) is released, offering reduced step requirements and supporting flexible diffusion step selection (2 or even 1 step) during the inference stage without the need for re-training.
 - **2023.12.23**: Code and models for [CCSR-v1](https://arxiv.org/pdf/2401.00877v1) are released. Please refer to this [branch](https://github.com/csslc/CCSR/tree/CCSR-v1.0).
 
 :star: If CCSR is helpful to your images or projects, please help star this repo. Thanks! :hugs:
 
-## 🌟 Overview Framework
-![ccsr](figs/framework.png)
-`
-## 😍 Visual Results`
+ ## 🧡ྀི Improvements
+We have implemented the CCSR-v2 code based on the [Diffusers](https://github.com/huggingface/diffusers). Compared to CCSR-v1, the following enhancements have been made:
+
+- **Stage2 Training**: The output $\hat{x}_{0 \gets T}$ from the starting point $x_T$ in Stage 1 is now used as the input for Stage 2, ensuring the more efficient one-step diffusion process.
+- **Inference stage**: Supports more efficient inference with as few as 2 or even 1 diffusion step; Enables flexible diffusion step selection without the need for re-training.
+
+
+## 😍 Visual Results
 ### Demo on Real-World SR
 [<img src="figs/compare_1.png" height="223px"/>](https://imgsli.com/MjMxMzA0) [<img src="figs/compare_2.png" height="223px"/>](https://imgsli.com/MjMxMzEx) [<img src="figs/compare_4.png" height="223px"/>](https://imgsli.com/MjMxMzE1) [<img src="figs/compare_6.png" height="223px"/>](https://imgsli.com/MjMxMzI3)
 [<img src="figs/compare_3.png" height="223px"/>](https://imgsli.com/MjMxMzEy) [<img src="figs/compare_5.png" height="223px"/>](https://imgsli.com/MjMxMzE5) 

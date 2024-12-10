@@ -29,8 +29,9 @@
  ## 🧡ྀི Improvements
 We have implemented the CCSR-v2 code based on the [Diffusers](https://github.com/huggingface/diffusers). Compared to CCSR-v1, the following enhancements have been made:
 
-- **Stage2 Training**: The output $\hat{x}_{0 \gets T}$ from the starting point $x_T$ in Stage 1 is now used as the input for Stage 2, ensuring the more efficient one-step diffusion process.
-- **Inference stage**: Supports more efficient inference with as few as 2 or even 1 diffusion step; Enables flexible diffusion step selection without the need for re-training.
+- **Stage2 Training**: The output $\hat{x}_{0 \gets T}$ from the starting point $x_T$ in Stage 1 is now used as the input for Stage 2, enabling a more efficient one-step diffusion process.
+- **Inference stage**: Supports highly efficient inference with as few as 2 or even 1 diffusion step; Allows flexible diffusion step selection without requiring re-training.
+- **Results stability**: CCSR-v2 exhibits significantly improved stability in synthesizing fine image details, ensuring higher-quality outputs.
 
 
 ## 😍 Visual Results

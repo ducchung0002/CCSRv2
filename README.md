@@ -5,7 +5,7 @@
 ## Improving the Stability of Diffusion Models for Content Consistent Super-Resolution
 
 
-<a href='https://arxiv.org/pdf/2401.00877.pdf'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a> <a href='https://csslc.github.io/project-CCSR'><img src='https://img.shields.io/badge/Project page-Github-blue'></a> <a href='https://github.com/csslc/CCSR'><img src='https://img.shields.io/badge/Code-Github-green'></a> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/CCSR-colab/blob/main/CCSR_colab.ipynb) 
+<a href='httphttps://arxiv.org/pdf/2401.00877v1'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a> <a href='https://csslc.github.io/project-CCSR'><img src='https://img.shields.io/badge/Project page-Github-blue'></a> <a href='https://github.com/csslc/CCSR'><img src='https://img.shields.io/badge/Code-Github-green'></a> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/CCSR-colab/blob/main/CCSR_colab.ipynb) 
 [![Replicate](https://replicate.com/cjwbw/ccsr/badge)](https://replicate.com/cjwbw/ccsr)
 
 [Lingchen Sun](https://scholar.google.com/citations?hl=zh-CN&tzom=-480&user=ZCDjTn8AAAAJ)<sup>1,2</sup>
@@ -18,6 +18,9 @@
 
 
 ## ⏰ Update
+- **2024.12.10**: Code and models for CCSR-v2 are released. 👀 Please refer to this [branch](https://github.com/csslc/CCSR/tree/CCSR-v2.0).
+- **2024.9.25**: ⭐[CCSR-v2](https://arxiv.org/pdf/2401.00877) is released, which supports different diffusion steps (2 or even 1 diffusion step) in the
+inference stage without re-training.
 - **2024.1.17**: Add Replicate demo [![Replicate](https://replicate.com/cjwbw/ccsr/badge)](https://replicate.com/cjwbw/ccsr).
 - **2024.1.16**: Add Gradio demo.
 - **2024.1.14**: Integrate [tile_diffusion](https://github.com/albarji/mixture-of-diffusers) and [tile_vae](https://github.com/pkuliyi2015/multidiffusion-upscaler-for-automatic1111/tree/main) to the [inference_ccsr_tile.py](inference_ccsr_tile.py) to save the GPU memory for inference.
@@ -31,8 +34,8 @@
 
 ## 🌟 Overview Framework
 ![ccsr](figs/framework.png)
-
-## 😍 Visual Results
+`
+## 😍 Visual Results`
 ### Demo on Real-World SR
 [<img src="figs/compare_1.png" height="223px"/>](https://imgsli.com/MjMxMzA0) [<img src="figs/compare_2.png" height="223px"/>](https://imgsli.com/MjMxMzEx) [<img src="figs/compare_4.png" height="223px"/>](https://imgsli.com/MjMxMzE1) [<img src="figs/compare_6.png" height="223px"/>](https://imgsli.com/MjMxMzI3)
 [<img src="figs/compare_3.png" height="223px"/>](https://imgsli.com/MjMxMzEy) [<img src="figs/compare_5.png" height="223px"/>](https://imgsli.com/MjMxMzE5) 

@@ -42,7 +42,6 @@ We have implemented the CCSR-v2 code based on the [Diffusers](https://github.com
 ### Demo on Real-World SR
 
 [<img src="figs/compare_1.png" height="223px"/>](https://imgsli.com/MzI2MTg5) [<img src="figs/compare_2.png" height="223px"/>](https://imgsli.com/MzI2MTky/1/3) 
-
 [<img src="figs/compare_3.png" height="223px"/>](https://imgsli.com/MzI2MTk0/0/2) [<img src="figs/compare_4.png" height="223px"/>](https://imgsli.com/MzI2MTk1/0/2) 
 
 

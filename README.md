@@ -50,11 +50,8 @@ is flexible for both multi-step diffusion and single-step diffusion, while produ
 [<img src="figs/compare_1.png" height="213px"/>](https://imgsli.com/MzI2MTg5) [<img src="figs/compare_2.png" height="213px"/>](https://imgsli.com/MzI2MTky/1/3) [<img src="figs/compare_3.png" height="213px"/>](https://imgsli.com/MzI2MTk0/0/2) [<img src="figs/compare_4.png" height="213px"/>](https://imgsli.com/MzI2MTk1/0/2) 
 
 
-### Comparisons with the standard DM-based SR methods
-
 ![ccsr](figs/compare_standard.png)
 
-### Comparisons with the efficient DM-based SR methods.
 ![ccsr](figs/compare_efficient.png)
 For more comparisons, please refer to our paper for details.
 
@@ -77,15 +74,18 @@ conda activate ccsr
 pip install -r requirements.txt
 ```
 ## 🍭 Quick Inference
+**For ease of comparison, we have provided the test results of CCSR-v2 on the DIV2K, RealSR, and DrealSR benchmarks with varying diffusion steps, which can be accessed via [Google Drive]((https://drive.google.com/drive/folders/1xjURQZgKAlENzMnAJA2PDG9h_UxfZzio?usp=sharing)).**
+
 #### Step 1: Download the pretrained models
 - Download the pretrained SD-2.1-base models from [HuggingFace](https://huggingface.co/stabilityai/stable-diffusion-2-1-base).
 - Download the CCSR-v2 models from and put the models in the `preset/models`:
 
-| Model Name             | Description                      | GoogleDrive                                                                                      | BaiduNetdisk                                                                                                             |
-|:-----------------------|:---------------------------------|:-------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------|
-| Controlnet             | Trained in the stage 1.          | [download](https://drive.google.com/drive/folders/1aHwgodKwKYZJBKs0QlFzanSjMDhrNyRA?usp=sharing) | [download](https://pan.baidu.com/s/1SKS70iE4GhhHGxqY1KS8mw) (pwd: ccsr)                                                  |
-| VAE                    | Trained in the stage 2.          | [download](https://drive.google.com/drive/folders/1yHfMV81Md6db4StHTP5MC-eSeLFeBKm8?usp=sharing) | [download](https://pan.baidu.com/s/1fxOIeL6Hk6Muq9h8itAIKQ) (pwd: ccsr)                                                  |
-| Pre-trained Controlnet | The pre-trained model of stage1. | [download](https://drive.google.com/drive/folders/1LTtBRuObITOJwbW-sTDnHtp8xIUZFDHh?usp=sharing) | [download](https://pan.baidu.com/s/1mDeuHBqNj_Iol7PCY_Xfww) (pwd: ccsr)                                                  |
+| Model Name             | Description                      | GoogleDrive                                                                                                                                                        | BaiduNetdisk                                                                                                                 |
+|:-----------------------|:---------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------|
+| Controlnet             | Trained in the stage 1.          | [download](https://drive.google.com/drive/folders/1aHwgodKwKYZJBKs0QlFzanSjMDhrNyRA?usp=sharing)                                                                   | [download](https://pan.baidu.com/s/1SKS70iE4GhhHGxqY1KS8mw) (pwd: ccsr)                                                      |
+| VAE                    | Trained in the stage 2.          | [download](https://drive.google.com/drive/folders/1yHfMV81Md6db4StHTP5MC-eSeLFeBKm8?usp=sharing)                                                                   | [download](https://pan.baidu.com/s/1fxOIeL6Hk6Muq9h8itAIKQ) (pwd: ccsr)                                                      |
+| Pre-trained Controlnet | The pre-trained model of stage1. | [download](https://drive.google.com/drive/folders/1LTtBRuObITOJwbW-sTDnHtp8xIUZFDHh?usp=sharing)                                                                   | [download](https://pan.baidu.com/s/1mDeuHBqNj_Iol7PCY_Xfww) (pwd: ccsr)                                                      |
+| Dino models            | The pre-trained models for disc. | [download](https://drive.google.com/drive/folders/1PcuZGUTJlltdPz2yk2ZIa4GCtb1yk_y6?usp=sharing)                                                                   | [download](https://pan.baidu.com/s/1nPdNwgua91mDDRApWUm39Q) (pwd: ccsr)                                                      |
 
 #### Step 2: Prepare testing data
 You can put the testing images in the `preset/test_datasets`.

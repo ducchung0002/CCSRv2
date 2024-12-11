@@ -26,26 +26,32 @@
 
 :star: If CCSR is helpful to your images or projects, please help star this repo. Thanks! :hugs:
 
- ## 🧡ྀི Improvements
-We have implemented the CCSR-v2 code based on the [Diffusers](https://github.com/huggingface/diffusers). Compared to CCSR-v1, the following enhancements have been made:
+ ## 🧡ྀི What's New in CCSR-v2?
+We have implemented the CCSR-v2 code based on the [Diffusers](https://github.com/huggingface/diffusers). Compared to CCSR-v1, CCSR-v2 brings a host of upgrades:
 
-- **Stage2 Training**: The output $\hat{x}_{0 \gets T}$ from the starting point $x_T$ in Stage 1 is now used as the input for Stage 2, enabling a more efficient one-step diffusion process.
-- **Inference stage**: Supports highly efficient inference with as few as 2 or even 1 diffusion step; Allows flexible diffusion step selection without requiring re-training.
-- **Results stability**: CCSR-v2 exhibits significantly improved stability in synthesizing fine image details, ensuring higher-quality outputs.
+- 🔄**Stage 2 Refinement**: In CCSR-v2, the output $\hat{x}_{0 \gets T}$ from Stage 1 is now directly fed into Stage 2, streamlining the restoration process into an efficient one-step diffusion workflow. This strategy boosts both speed and performance.
+- 📈**Enhanced Clarity**: With upgraded algorithms, CCSR-v2 restores images with crisper details while maintaining fidelity.
+- ⚖️**Results stability**: CCSR-v2 exhibits significantly improved stability in synthesizing fine image details, ensuring higher-quality outputs.
+- ⚡**Efficient**: Supports highly efficient inference with as few as 2 or even 1 diffusion step, drastically reducing computation time without compromising quality. 
+- 🛠️**Flexibility**: Allows flexible diffusion step selection, adapting to your specific needs, without requiring re-training.
 
+## 🌟 Overview Framework
+![ccsr](figs/framework.png)
 
 ## 😍 Visual Results
 ### Demo on Real-World SR
-[<img src="figs/compare_1.png" height="223px"/>](https://imgsli.com/MjMxMzA0) [<img src="figs/compare_2.png" height="223px"/>](https://imgsli.com/MjMxMzEx) [<img src="figs/compare_4.png" height="223px"/>](https://imgsli.com/MjMxMzE1) [<img src="figs/compare_6.png" height="223px"/>](https://imgsli.com/MjMxMzI3)
-[<img src="figs/compare_3.png" height="223px"/>](https://imgsli.com/MjMxMzEy) [<img src="figs/compare_5.png" height="223px"/>](https://imgsli.com/MjMxMzE5) 
 
-### Comparisons on Real-World SR
-For the diffusion model-based method, two restored images that have the best and worst PSNR values over 10 runs are shown for a more comprehensive and fair comparison. 
+[<img src="figs/compare_1.png" height="223px"/>](https://imgsli.com/MzI2MTg5) [<img src="figs/compare_2.png" height="223px"/>](https://imgsli.com/MzI2MTky/1/3) 
 
-![ccsr](figs/realworld.png)
+[<img src="figs/compare_3.png" height="223px"/>](https://imgsli.com/MzI2MTk0/0/2) [<img src="figs/compare_4.png" height="223px"/>](https://imgsli.com/MzI2MTk1/0/2) 
 
-### Comparisons on Bicubic SR
-![ccsr](figs/bicubic.png)
+
+### Comparisons with the standard DM-based SR methods
+
+![ccsr](figs/compare_standard.png)
+
+### Comparisons with the efficient DM-based SR methods.
+![ccsr](figs/compare_efficient.png)
 For more comparisons, please refer to our paper for details.
 
 ## 📝 Quantitative comparisons

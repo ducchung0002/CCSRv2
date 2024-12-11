@@ -226,6 +226,7 @@ if __name__ == "__main__":
     parser.add_argument("--guidance_scale", type=float, default=1.0, help="Guidance scale for generation")
     parser.add_argument("--conditioning_scale", type=float, default=1.0, help="Conditioning scale")
     parser.add_argument("--num_inference_steps", type=int, default=1, help="Number of inference steps(not the final inference time)")
+    # final_inference_time = num_inference_steps * (t_max - t_min) + 1
     parser.add_argument("--t_max", type=float, default=0.6666, help="Maximum timestep")
     parser.add_argument("--t_min", type=float, default=0.0, help="Minimum timestep")
     parser.add_argument("--process_size", type=int, default=512, help="Processing size of the image")

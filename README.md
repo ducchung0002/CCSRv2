@@ -29,17 +29,23 @@
  ## 🧡ྀི What's New in CCSR-v2?
 We have implemented the CCSR-v2 code based on the [Diffusers](https://github.com/huggingface/diffusers). Compared to CCSR-v1, CCSR-v2 brings a host of upgrades:
 
-- 🔄**Stage 2 Refinement**: In CCSR-v2, the output $\hat{x}_{0 \gets T}$ from Stage 1 is now directly fed into Stage 2, streamlining the restoration process into an efficient one-step diffusion workflow. This strategy boosts both speed and performance.
+- 🛠️**Step Flexibility**: Offers flexibility in diffusion step selection, **allowing users to freely adjust the number of steps to suit their specific requirements**. This adaptability requires no additional re-training, ensuring seamless integration into diverse workflows.
+- ⚡**Efficiency**: Supports highly efficient inference with **as few as 2 or even 1 diffusion step**, drastically reducing computation time without compromising quality.
 - 📈**Enhanced Clarity**: With upgraded algorithms, CCSR-v2 restores images with crisper details while maintaining fidelity.
 - ⚖️**Results stability**: CCSR-v2 exhibits significantly improved stability in synthesizing fine image details, ensuring higher-quality outputs.
-- ⚡**Efficient**: Supports highly efficient inference with as few as 2 or even 1 diffusion step, drastically reducing computation time without compromising quality. 
-- 🛠️**Flexibility**: Allows flexible diffusion step selection, adapting to your specific needs, without requiring re-training.
+- 🔄**Stage 2 Refinement**: In CCSR-v2, the output $\hat{x}_{0 \gets T}$ from Stage 1 is now directly fed into Stage 2, streamlining the restoration process into an efficient one-step diffusion workflow. This strategy boosts both speed and performance.
+
+![ccsr](figs/fig.png)
+Visual comparisons between the SR outputs with the same input low-quality image but two different noise samples by different DM-based
+methods. `S` denotes diffusion sampling timesteps. Existing DM-based methods, including StableSR, PASD, SeeSR, SUPIR and AddSR, **show noticeable instability with the different noise samples**. OSEDiff directly takes low-quality image as input without
+noise sampling. It is deterministic and stable, but **cannot perform multi-step diffusion** for high generative capacity. In contrast, **our proposed CCSR method
+is flexible for both multi-step diffusion and single-step diffusion, while producing stable results with high fidelity and visual quality**.
 
 ## 🌟 Overview Framework
 ![ccsr](figs/framework.png)
 
 ## 😍 Visual Results
-### Demo on Real-World SR
+### Demo on Real-world SR
 
 [<img src="figs/compare_1.png" height="213px"/>](https://imgsli.com/MzI2MTg5) [<img src="figs/compare_2.png" height="213px"/>](https://imgsli.com/MzI2MTky/1/3) [<img src="figs/compare_3.png" height="213px"/>](https://imgsli.com/MzI2MTk0/0/2) [<img src="figs/compare_4.png" height="213px"/>](https://imgsli.com/MzI2MTk1/0/2) 
 
@@ -64,81 +70,106 @@ More details about G-STD and L-STD can be found in our paper.
 git clone https://github.com/csslc/CCSR.git
 cd CCSR
 
+
 # create an environment with python >= 3.9
 conda create -n ccsr python=3.9
 conda activate ccsr
 pip install -r requirements.txt
-pip install -e git+https://github.com/CompVis/taming-transformers.git@master#egg=taming-transformers
 ```
 ## 🍭 Quick Inference
 #### Step 1: Download the pretrained models
-- Download the CCSR models from:
+- Download the pretrained SD-2.1-base models from [HuggingFace](https://huggingface.co/stabilityai/stable-diffusion-2-1-base).
+- Download the CCSR-v2 models from and put the models in the `preset/models`:
 
-| Model Name           | Description                                  | GoogleDrive                                                                           | BaiduNetdisk                                                            |
-|:---------------------|:---------------------------------------------|:--------------------------------------------------------------------------------------|:------------------------------------------------------------------------|
-| real-world_ccsr.ckpt | CCSR model for real-world image restoration. | [download](https://drive.google.com/drive/folders/1jM1mxDryPk9CTuFTvYcraP2XIVzbPiw_?usp=drive_link) | [download](https://pan.baidu.com/s/1uYi0-8nyH35P5rMsLD1J0w) (pwd: CCSR) |
-| bicubic_ccsr.ckpt    | CCSR model for bicubic image restoration.    | download                                                                              | download                                                                |
+| Model Name             | Description                      | GoogleDrive                                                                                      | BaiduNetdisk                                                                                                             |
+|:-----------------------|:---------------------------------|:-------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------|
+| Controlnet             | Trained in the stage 1.          | [download](https://drive.google.com/drive/folders/1aHwgodKwKYZJBKs0QlFzanSjMDhrNyRA?usp=sharing) | [download](https://pan.baidu.com/s/1SKS70iE4GhhHGxqY1KS8mw) (pwd: ccsr)                                                  |
+| VAE                    | Trained in the stage 2.          | [download](https://drive.google.com/drive/folders/1yHfMV81Md6db4StHTP5MC-eSeLFeBKm8?usp=sharing) | [download](https://pan.baidu.com/s/1fxOIeL6Hk6Muq9h8itAIKQ) (pwd: ccsr)                                                  |
+| Pre-trained Controlnet | The pre-trained model of stage1. | [download](https://drive.google.com/drive/folders/1LTtBRuObITOJwbW-sTDnHtp8xIUZFDHh?usp=sharing) | [download](https://pan.baidu.com/s/1mDeuHBqNj_Iol7PCY_Xfww) (pwd: ccsr)                                                  |
 
 #### Step 2: Prepare testing data
 You can put the testing images in the `preset/test_datasets`.
 
-#### Step 3: Running testing command
+#### Step 3: Running testing command 
+For one-step diffusion process:
 ```
-python inference_ccsr.py \
---input preset/test_datasets \
---config configs/model/ccsr_stage2.yaml \
---ckpt weights/real-world_ccsr.ckpt \
---steps 45 \
---sr_scale 4 \
+python test_ccsr_tile.py \
+--pretrained_model_path preset/models/stable-diffusion-2-1-base \
+--controlnet_model_path preset/models \
+--vae_model_path preset/models \
+--baseline_name ccsr-v2 \
+--image_path preset/test_datasets \
+--output_dir experiments/test \
+--sample_method ddpm \
+--num_inference_steps 1 \
+--t_min 0.0 \
+--start_point lr \
+--start_steps 999 \
+--process_size 512 \
+--guidance_scale 1.0 \
+--sample_times 1 \
+--use_vae_encode_condition \
+--upscale 4
+```
+For multi-step diffusion process:
+```
+python test_ccsr_tile.py \
+--pretrained_model_path preset/models/stable-diffusion-2-1-base \
+--controlnet_model_path preset/models \
+--vae_model_path preset/models \
+--baseline_name ccsr-v2 \
+--image_path preset/test_datasets \
+--output_dir experiments/test \
+--sample_method ddpm \
+--num_inference_steps 6 \
 --t_max 0.6667 \
---t_min 0.3333 \
---color_fix_type adain \
---output experiments/test \
---device cuda \
---repeat_times 1 
+--t_min 0.5 \
+--start_point lr \
+--start_steps 999 \
+--process_size 512 \
+--guidance_scale 4.5 \
+--sample_times 1 \
+--use_vae_encode_condition \
+--upscale 4
 ```
 We integrate [tile_diffusion](https://github.com/albarji/mixture-of-diffusers) and [tile_vae](https://github.com/pkuliyi2015/multidiffusion-upscaler-for-automatic1111/tree/main) to the [inference_ccsr_tile.py](inference_ccsr_tile.py) to save the GPU memory for inference.
 You can change the tile size and stride according to the VRAM of your device.
 ```
-python inference_ccsr_tile.py \
---input preset/test_datasets \
---config configs/model/ccsr_stage2.yaml \
---ckpt weights/real-world_ccsr.ckpt \
---steps 45 \
---sr_scale 4 \
+python test_ccsr_tile.py \
+--pretrained_model_path preset/models/stable-diffusion-2-1-base \
+--controlnet_model_path preset/models \
+--vae_model_path preset/models \
+--baseline_name ccsr-v2 \
+--image_path preset/test_datasets \
+--output_dir experiments/test \
+--sample_method ddpm \
+--num_inference_steps 6 \
 --t_max 0.6667 \
---t_min 0.3333 \
+--t_min 0.5 \
+--start_point lr \
+--start_steps 999 \
+--process_size 512 \
+--guidance_scale 4.5 \
+--sample_times 1 \
+--use_vae_encode_condition \
+--upscale 4 \
 --tile_diffusion \
 --tile_diffusion_size 512 \
 --tile_diffusion_stride 256 \
 --tile_vae \
 --vae_decoder_tile_size 224 \
 --vae_encoder_tile_size 1024 \
---color_fix_type adain \
---output experiments/test \
---device cuda \
---repeat_times 1
 ```
 
-You can obtain `N` different SR results by setting `repeat_time` as `N` to test the stability of CCSR. The data folder should be like this:
+You can obtain `N` different SR results by setting `sample_times` as `N` to test the stability of CCSR. The data folder should be like this:
 
 ```
  experiments/test
- ├── sample0   # the first group of SR results 
- └── sample1   # the second group of SR results 
+ ├── sample00   # the first group of SR results 
+ └── sample01   # the second group of SR results 
    ...
  └── sampleN   # the N-th group of SR results 
 ```
-
-#### Gradio Demo
-Download the model `real-world_ccsr.ckpt` and put the model to `weights/`, then run the following command to interact with the gradio website.
-```
-python gradio_ccsr.py \
---ckpt weights/real-world_ccsr.ckpt \
---config configs/model/ccsr_stage2.yaml \
---device cuda
-```
-![ccsr](figs/gradio_ccsr.png)
 
 ## 📏 Evaluation
 1. Calculate the Image Quality Assessment for each restored group.
@@ -162,31 +193,10 @@ python gradio_ccsr.py \
 ## 🚋 Train 
 
 #### Step1: Prepare training data
+  Generate txt file for the training set.
+  Fill in the required information in [get_path](scripts/get_path.py) and run, then you can obtain the txt file recording the paths of ground-truth images. 
+  You can save the txt file into `preset/gt_path.txt`.
 
-1. Generate file list of training set and validation set.
-
-    ```shell
-   python scripts/make_file_list.py \
-   --img_folder [hq_dir_path] \
-   --val_size [validation_set_size] \
-   --save_folder [save_dir_path] \
-   --follow_links
-    ```
-    
-    This script will collect all image files in `img_folder` and split them into training set and validation set automatically. You will get two file lists in `save_folder`, each line in a file list contains an absolute path of an image file:
-    
-    ```
-    save_dir_path
-    ├── train.list # training file list
-    └── val.list   # validation file list
-    ```
-
-2. Configure training set and validation set.
-
-    For real-world image restoration, fill in the following configuration files with appropriate values.
-
-    - [training set](configs/dataset/general_deg_stablesr_realesrgan_train.yaml) and [validation set](configs/dataset/general_deg_stablesr_realesrgan_val.yaml) for **Real-ESRGAN** degradation.
- 
 #### Step2: Train Stage1 Model
 1. Download pretrained [Stable Diffusion v2.1](https://huggingface.co/stabilityai/stable-diffusion-2-1-base) to provide generative capabilities.
 
@@ -194,36 +204,60 @@ python gradio_ccsr.py \
     wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt --no-check-certificate
     ```
 
-2. Create the initial model weights.
+2. Start training.
 
     ```shell
-   python scripts/make_stage2_init_weight.py \
-   --cldm_config configs/model/ccsr_stage1.yaml \
-   --sd_weight [sd_v2.1_ckpt_path] \
-   --output weights/init_weight_ccsr.ckpt
-    ```
-   
-3. Configure training-related information.
-
-    Fill in the configuration file of [training of stage1](configs/train_ccsr_stage1.yaml) with appropriate settings.
-
-4. Start training.
-
-    ```shell
-    python train.py --config configs/train_ccsr_stage1.yaml
+   CUDA_VISIBLE_DEVICES="0,1,2,3," accelerate launch train_ccsr_stage1.py \
+    --pretrained_model_name_or_path="preset/models/stable-diffusion-2-1-base" \
+    --controlnet_model_name_or_path='preset/models/pretrained_controlnet' \
+    --enable_xformers_memory_efficient_attention \
+    --output_dir="./experiments/ccsrv2_stage1" \
+    --mixed_precision="fp16" \
+    --resolution=512 \
+    --learning_rate=5e-5 \
+    --train_batch_size=4 \
+    --gradient_accumulation_steps=6 \
+    --dataloader_num_workers=0 \
+    --checkpointing_steps=500 \
+    --t_max=0.6667 \
+    --max_train_steps=20000 \
+    --dataset_root_folders 'preset/gt_path.txt' 
     ```
 
 #### Step3: Train Stage2 Model
-1. Configure training-related information.
-
-    Fill in the configuration file of [training of stage2](configs/train_ccsr_stage2.yaml) with appropriate settings.
-
+1. Put the model obtained from the stage1 into `controlnet_model_name_or_path`.
 2. Start training.
-   ```shell
-    python train.py --config configs/train_ccsr_stage2.yaml
-    ```
+    ```shell
+    CUDA_VISIBLE_DEVICES="0,1,2,3," accelerate launch train_ccsr_stage2.py \
+    --pretrained_model_name_or_path="preset/models/stable-diffusion-2-1-base" \
+    --controlnet_model_name_or_path='preset/models/model_stage1' \
+    --enable_xformers_memory_efficient_attention \
+    --output_dir="./experiments/ccsrv2_stage2" \
+    --mixed_precision="fp16" \
+    --resolution=512 \
+    --learning_rate=5e-6 \
+    --train_batch_size=2 \
+    --gradient_accumulation_steps=8 \
+    --checkpointing_steps=500 \
+    --is_start_lr=True \
+    --t_max=0.6667 \
+    --num_inference_steps=1 \
+    --is_module \
+    --lambda_l2=1.0 \
+    --lambda_lpips=1.0 \
+    --lambda_disc=0.05 \
+    --lambda_disc_train=0.5 \
+    --begin_disc=100 \
+    --max_train_steps=2000 \
+    --dataset_root_folders 'preset/gt_path.txt'  
+      ```
+    
+    
+    
+    
 
 ### Citations
+
 If our code helps your research or work, please consider citing our paper.
 The following are BibTeX references:
 

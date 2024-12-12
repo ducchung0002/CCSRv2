@@ -1,12 +1,12 @@
 diffusers==0.21.0
 torch==2.0.1
 pytorch_lightning
-accelerate
+accelerate==1.2.0
 transformers==4.25.0
-xformers    
+xformers==0.0.22 
 loralib
-fairscale
-basicsr
+fairscale==0.4.13
+basicsr==1.4.2
 timm==0.9.5
 pydantic==1.10.11
 huggingface_hub==0.25.2

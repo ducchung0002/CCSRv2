@@ -965,23 +965,23 @@ for epoch in range(first_epoch, args.num_train_epochs):
                     t_min = timesteps_loop[-1]
 
                 pixel_values = batch["pixel_values"].to(accelerator.device)
-                if args.is_module:
-                    latents_gt = vae.module.encode(pixel_values).latent_dist.sample()
-                    latents_gt = latents_gt * vae.module.config.scaling_factor # Convert images to latent space
-                else:
-                    latents_gt = vae.encode(pixel_values).latent_dist.sample()
-                    latents_gt = latents_gt * vae.config.scaling_factor # Convert images to latent space
+                # if args.is_module:
+                #     latents_gt = vae.module.encode(pixel_values).latent_dist.sample()
+                #     latents_gt = latents_gt * vae.module.config.scaling_factor # Convert images to latent space
+                # else:
+                latents_gt = vae.encode(pixel_values).latent_dist.sample()
+                latents_gt = latents_gt * vae.config.scaling_factor # Convert images to latent space
 
                 encoder_hidden_states = text_encoder(batch["input_caption"].to(accelerator.device))[0]
 
                 controlnet_image = batch["conditioning_pixel_values"].to(accelerator.device)
                 controlnet_image_encode = 2*controlnet_image-1
-                if args.is_module:
-                    vae_encode_condition_hidden_states = vae.module.encode(controlnet_image_encode).latent_dist.sample()
-                    vae_encode_condition_hidden_states = vae_encode_condition_hidden_states * vae.module.config.scaling_factor
-                else:
-                    vae_encode_condition_hidden_states = vae.encode(controlnet_image_encode).latent_dist.sample()
-                    vae_encode_condition_hidden_states = vae_encode_condition_hidden_states * vae.config.scaling_factor # Convert images to latent space
+                # if args.is_module:
+                #     vae_encode_condition_hidden_states = vae.module.encode(controlnet_image_encode).latent_dist.sample()
+                #     vae_encode_condition_hidden_states = vae_encode_condition_hidden_states * vae.module.config.scaling_factor
+                # else:
+                vae_encode_condition_hidden_states = vae.encode(controlnet_image_encode).latent_dist.sample()
+                vae_encode_condition_hidden_states = vae_encode_condition_hidden_states * vae.config.scaling_factor # Convert images to latent space
                                 
                 if global_step > args.begin_disc:
                     lambda_l2 = args.lambda_l2
@@ -1111,10 +1111,10 @@ for epoch in range(first_epoch, args.num_train_epochs):
         
             # optimize the generator: vae decoder
             discriminatornet.requires_grad_(False)
-            if args.is_module:
-                image = vae.module.decode(latents / vae.module.config.scaling_factor, return_dict=False)[0].clamp(-1, 1)
-            else:
-                image = vae.decode(latents / vae.config.scaling_factor, return_dict=False)[0].clamp(-1, 1)
+            # if args.is_module:
+            #     image = vae.module.decode(latents / vae.module.config.scaling_factor, return_dict=False)[0].clamp(-1, 1)
+            # else:
+            image = vae.decode(latents / vae.config.scaling_factor, return_dict=False)[0].clamp(-1, 1)
             # compute the discriminator loss & update parameters
             _, cls_lr = model_fea(F.interpolate(controlnet_image, size=518, mode='bilinear'))
 
@@ -1141,10 +1141,10 @@ for epoch in range(first_epoch, args.num_train_epochs):
 
             # update discriminator
             discriminatornet.requires_grad_(True)
-            if args.is_module:
-                discriminatornet.module.dino.requires_grad_(False)
-            else:
-                discriminatornet.dino.requires_grad_(False)
+            # if args.is_module:
+            #     discriminatornet.module.dino.requires_grad_(False)
+            # else:
+            discriminatornet.dino.requires_grad_(False)
             pred_real, features = discriminatornet(pixel_values, cls_lr.detach())
             pred_fake, _ = discriminatornet(image.detach(), cls_lr.detach())
             pred_fake = torch.cat(pred_fake, dim=1)

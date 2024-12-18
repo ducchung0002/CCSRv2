@@ -49,7 +49,8 @@ def load_pipeline(args, accelerator, enable_xformers_memory_efficient_attention)
 
     text_encoder = CLIPTextModel.from_pretrained(args.pretrained_model_path, subfolder="text_encoder")
     tokenizer = CLIPTokenizer.from_pretrained(args.pretrained_model_path, subfolder="tokenizer")
-    feature_extractor = CLIPImageProcessor.from_pretrained(os.path.join(args.pretrained_model_path, "feature_extractor"))
+    # feature_extractor = CLIPImageProcessor.from_pretrained(os.path.join(args.pretrained_model_path, "feature_extractor"))
+    feature_extractor = CLIPImageProcessor.from_pretrained(args.pretrained_model_path, subfolder="feature_extractor")
     unet = UNet2DConditionModel.from_pretrained(args.pretrained_model_path, subfolder="unet")
     controlnet = ControlNetModel.from_pretrained(args.controlnet_model_path, subfolder="controlnet")
 
